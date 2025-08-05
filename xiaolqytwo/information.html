@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="plugins/servers/dnslaxjhya/style.css">
-<link href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery-confirm/3.2.3/jquery-confirm.min.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+<link rel="stylesheet" href="plugins/servers/xiaolqytwo/style.css">
+<link href="plugins/servers/xiaolqytwo/jquery-confirm.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="plugins/servers/xiaolqytwo/jquery-confirm.min.js"></script>
 <div id="YVSY">	
     <div class="row">
         <div class="col-md-4 col-sm-12">
@@ -92,10 +92,8 @@ var edit_domain = function(domain_typefunc,domain_valuefunc,serverid){
                                 if (response.result == "success"){
                                     self.setType('green')
                                     self.setTitle('成功');
-                                    self.setContent('修改成功,5秒后自动刷新页面');
-                                    setTimeout(function(){
-                                         window.location.reload();
-                                    },5000)
+                                    self.setContent('修改成功,即将刷新页面');
+                                    window.location.reload();
                                 } else {
                                     self.setType('red')
                                     self.setTitle('错误');
