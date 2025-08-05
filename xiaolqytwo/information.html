@@ -1,0 +1,127 @@
+<link rel="stylesheet" href="plugins/servers/dnslaxjhya/style.css">
+<link href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery-confirm/3.2.3/jquery-confirm.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+<div id="YVSY">	
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="box">
+                <div class="boxTitle">
+                    域名
+                </div>
+                <div>
+                <span class="boxContent">{$domain}</span>
+                  </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="box">
+                <div class="boxTitle">
+                    当前解析类型
+                </div>
+                <div>
+                  <span class="boxContent">{$domain_type}</span>
+                </div>
+             </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="box">
+                <div class="boxTitle">
+                    当前解析地址
+                </div>
+                <div>
+                  <span class="boxContent">{$domain_value}</span>		    <button type="button" style="  float: right;" class="btn btn-default" onclick="edit_domain('{$domain_type}','{$domain_value}','{$serviceid}')">
+				 修改解析
+			</button>
+                </div>
+             </div>
+        </div>
+	</div>
+</div>
+<script>
+var edit_domain = function(domain_typefunc,domain_valuefunc,serverid){
+	if(domain_typefunc == 'A'){
+	var labalhtml = `<label>解析类别</label>
+	<select name="domain_type" class="form-control">
+	<option value="A" selected="selected">A记录</option>
+	<option value="CNAME">Cname记录</option>
+	</select>`;
+	}else{
+	var labalhtml = `<label>解析类别</label>
+	<select name="domain_type" class="form-control">
+	<option value="CNAME" selected="selected">Cname记录</option>
+	<option value="A">A记录</option>
+	</select>`;
+	}
+    $.confirm({
+        title: '修改解析',
+        content: '' +
+        '<form action="" class="formName">' +
+        '<div class="form-group">' +
+        '<p>修改解析信息</p>' +
+        '<div class="form-group">'+ labalhtml +
+		'<label>解析地址</label><input type="text" class="form-control" name="domain_value" value="' + domain_valuefunc +'">' +
+        '</div>' +
+        '</form>',
+        buttons: {
+            formSubmit: {
+                text: '提交',
+                btnClass: 'btn-blue',
+                action: function () {
+                    var domain_type = this.$content.find('[name=domain_type]').val();
+                    var domain_value = this.$content.find('[name=domain_value]').val();
+                    if(!domain_type || !domain_value){
+                        $.alert('请完整填写信息');
+                        return false;
+                    }
+                    $.confirm({
+                        content: function () {
+                            var self = this;
+                            return $.ajax({
+                                url: '{$MODULE_CUSTOM_API}',
+                                dataType: 'json',
+								method: 'post',
+								data: {
+                                      func: 'xiugai',
+									  domain_value: domain_value,
+									  domain_type: domain_type
+                                },
+                                headers: {
+                                    Authorization: 'JWT {$Think.get.jwt}',
+                                }
+                            }).done(function (response) {
+                                if (response.result == "success"){
+                                    self.setType('green')
+                                    self.setTitle('成功');
+                                    self.setContent('修改成功,5秒后自动刷新页面');
+                                    setTimeout(function(){
+                                         window.location.reload();
+                                    },5000)
+                                } else {
+                                    self.setType('red')
+                                    self.setTitle('错误');
+                                    self.setContent(response.msg);
+                                }
+
+                            }).fail(function(){
+                                self.setType('red')
+                                self.setTitle('错误');
+                                self.setContent('与服务器通讯时出现错误, 请重试.');
+                            });
+                        }
+                    });
+                }
+            },
+            cancel: {
+                text: '取消',
+            }
+        },
+        onContentReady: function () {
+            var jc = this;
+            this.$content.find('form').on('submit', function (e) {
+                e.preventDefault();
+                jc.$$formSubmit.trigger('click');
+            });
+        }
+    });
+}
+</script>
