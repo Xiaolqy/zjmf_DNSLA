@@ -21,4 +21,4 @@
     
 ## 捐赠我
 朱波家境贫寒，希望可以捐赠
- ![image](./mmrewardqrcode1753005758106.jpg)
+ ![image](./mm_reward_qrcode_1753005758106.png)
